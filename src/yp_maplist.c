@@ -21,29 +21,8 @@
 #include <rpcsvc/ypclnt.h>
 #include <rpcsvc/yp_prot.h>
 
-#include "internal.h"
-
 int
 yp_maplist (const char *indomain, struct ypmaplist **outmaplist)
 {
-  struct ypresp_maplist resp;
-  enum clnt_stat result;
-
-  if (indomain == NULL || indomain[0] == '\0')
-    return YPERR_BADARGS;
-
-  memset (&resp, '\0', sizeof (resp));
-
-  result = do_ypcall_tr (indomain, YPPROC_MAPLIST, (xdrproc_t) xdr_domainname,
-                         (caddr_t) &indomain, (xdrproc_t) xdr_ypresp_maplist,
-                         (ypresp_val *) &resp);
-
-  if (result == YPERR_SUCCESS)
-    {
-      *outmaplist = resp.list;
-      /* We don't free the list, this will be done by ypserv
-         xdr_free((xdrproc_t)xdr_ypresp_maplist, (char *)&resp); */
-    }
-
-  return result;
+  return YPERR_YPERR;
 }

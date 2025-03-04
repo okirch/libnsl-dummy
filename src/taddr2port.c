@@ -17,8 +17,6 @@
 #include "config.h"
 #endif
 
-#if defined(HAVE_TIRPC)
-
 #include <netdb.h>
 #include <stddef.h>
 #include <rpc/rpc.h>
@@ -29,32 +27,5 @@
 unsigned short
 taddr2port (const struct netconfig *nconf, const struct netbuf *nbuf)
 {
-  unsigned short port = 0;
-  struct __rpc_sockinfo si;
-  struct sockaddr_in *sin;
-  struct sockaddr_in6 *sin6;
-
-  if (nconf == NULL || nbuf == NULL || nbuf->len <= 0)
-    return 0;
-
-  if (!__rpc_nconf2sockinfo(nconf, &si))
-    return 0;
-
-  switch (si.si_af)
-    {
-    case AF_INET:
-      sin = nbuf->buf;
-      port = sin->sin_port;
-      break;
-    case AF_INET6:
-      sin6 = nbuf->buf;
-      port = sin6->sin6_port;
-      break;
-    default:
-      break;
-    }
-
-  return htons (port);
+  return 0;
 }
-
-#endif

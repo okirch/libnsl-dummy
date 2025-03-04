@@ -17,8 +17,6 @@
 #include "config.h"
 #endif
 
-#if defined(HAVE_TIRPC)
-
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <stddef.h>
@@ -31,45 +29,5 @@ const char *
 taddr2ipstr (const struct netconfig *nconf, const struct netbuf *nbuf,
 	     char *buf, size_t buflen)
 {
-  struct __rpc_sockinfo si;
-  struct sockaddr_in *sin;
-  struct sockaddr_in6 *sin6;
-  struct sockaddr_un *sun;
-
-  if (nconf == NULL || nbuf == NULL || nbuf->len <= 0)
-    return NULL;
-
-  if (!__rpc_nconf2sockinfo(nconf, &si))
-    return NULL;
-
-  switch (si.si_af)
-    {
-    case AF_INET:
-      sin = nbuf->buf;
-      if (inet_ntop(si.si_af, &sin->sin_addr, buf, buflen) == NULL)
-	return NULL;
-      break;
-    case AF_INET6:
-      sin6 = nbuf->buf;
-      if (inet_ntop(si.si_af, &sin6->sin6_addr, buf, buflen) == NULL)
-	return NULL;
-      break;
-    case AF_LOCAL:
-      sun = nbuf->buf;
-      /*      if (asprintf(&ret, "%.*s", (int)(sun->sun_len -
-	      offsetof(struct sockaddr_un, sun_path)),
-	      sun->sun_path) < 0)*/
-      if (snprintf (buf, buflen, "%.*s", (int)(sizeof(*sun) -
-					       offsetof(struct sockaddr_un, sun_path)),
-		    sun->sun_path) < 0)
-	return NULL;
-      break;
-    default:
-      return NULL;
-      break;
-    }
-
-  return buf;
+  return NULL;
 }
-
-#endif /* HAVE_TIRPC */

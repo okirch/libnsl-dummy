@@ -27,26 +27,5 @@
 int
 yp_order (const char *indomain, const char *inmap, unsigned int *outorder)
 {
-  struct ypreq_nokey req;
-  struct ypresp_order resp;
-  enum clnt_stat result;
-
-  if (indomain == NULL || indomain[0] == '\0' ||
-      inmap == NULL || inmap[0] == '\0')
-    return YPERR_BADARGS;
-
-  req.domain = (char *) indomain;
-  req.map = (char *) inmap;
-  memset (&resp, '\0', sizeof (resp));
-  result = do_ypcall_tr (indomain, YPPROC_ORDER, (xdrproc_t) xdr_ypreq_nokey,
-                         (caddr_t) &req, (xdrproc_t) xdr_ypresp_order,
-                         (ypresp_val *) &resp);
-
-  if (result != YPERR_SUCCESS)
-    return result;
-
-  *outorder = resp.ordernum;
-  xdr_free ((xdrproc_t) xdr_ypresp_order, (char *) &resp);
-
-  return result;
+  return YPERR_YPERR;
 }
